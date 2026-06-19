@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { SPHEngine, DEFAULT_PARAMS, PRESETS } from '../utils/sph-engine'
 import type { SimParams, Preset, Particle } from '../types'
 
+export type HeatmapIntensity = 'low' | 'medium' | 'high' | 'auto'
+
 export const useFluidStore = defineStore('fluid', {
   state: () => ({
     engine: null as SPHEngine | null,
@@ -15,6 +17,9 @@ export const useFluidStore = defineStore('fluid', {
     _lastTime: 0,
     _fpsAccum: 0,
     _fpsFrames: 0,
+    heatmapIntensity: 'auto' as HeatmapIntensity,
+    showHeatmapViewer: false,
+    heatmapGridSize: 10,
   }),
   getters: {
     particleArray: (state) => state.engine?.particles ?? [],
@@ -95,6 +100,15 @@ export const useFluidStore = defineStore('fluid', {
           this.engine['cellSize'] = value
         }
       }
+    },
+    setHeatmapIntensity(intensity: HeatmapIntensity) {
+      this.heatmapIntensity = intensity
+    },
+    toggleHeatmapViewer() {
+      this.showHeatmapViewer = !this.showHeatmapViewer
+    },
+    setHeatmapGridSize(size: number) {
+      this.heatmapGridSize = size
     },
   },
 })

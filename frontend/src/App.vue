@@ -4,6 +4,7 @@ import { useFluidStore } from './store/fluid'
 import { PRESETS } from './utils/sph-engine'
 import FluidCanvas from './components/FluidCanvas.vue'
 import ControlPanel from './components/ControlPanel.vue'
+import HeatmapViewer from './components/HeatmapViewer.vue'
 
 const store = useFluidStore()
 
@@ -60,5 +61,7 @@ onMounted(() => {
         <span class="text-gray-300 font-mono">{{ store.frameCount }}</span>
       </div>
     </footer>
+
+    <HeatmapViewer />
   </div>
 </template>

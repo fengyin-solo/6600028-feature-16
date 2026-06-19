@@ -40,6 +40,14 @@ function onParticleCount(e: Event) {
 function onDt(e: Event) {
   store.updateParam('dt', parseFloat((e.target as HTMLInputElement).value))
 }
+
+function onHeatmapIntensity(value: string) {
+  store.setHeatmapIntensity(value as any)
+}
+
+function openHeatmapViewer() {
+  store.toggleHeatmapViewer()
+}
 </script>
 
 <template>
@@ -86,6 +94,44 @@ function onDt(e: Event) {
         class="flex-1 bg-gray-700 hover:bg-gray-600 disabled:opacity-40 text-gray-200 py-2 rounded text-sm transition"
       >
         单步
+      </button>
+    </div>
+
+    <!-- Heatmap Controls -->
+    <div class="space-y-3">
+      <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">热力图</h3>
+
+      <div>
+        <label class="flex justify-between text-xs text-gray-400 mb-1">
+          <span>强度层级</span>
+        </label>
+        <div class="grid grid-cols-4 gap-1">
+          <button
+            v-for="level in ['low', 'medium', 'high', 'auto']"
+            :key="level"
+            @click="onHeatmapIntensity(level)"
+            class="py-1 text-xs rounded transition"
+            :class="store.heatmapIntensity === level
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'"
+          >
+            {{ level === 'low' ? '低' : level === 'medium' ? '中' : level === 'high' ? '高' : '自动' }}
+          </button>
+        </div>
+      </div>
+
+      <button
+        @click="openHeatmapViewer"
+        class="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded transition flex items-center justify-center gap-2"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h6v6"></path>
+          <path d="M10 14 21 3"></path>
+          <path d="M21 14v7h-7"></path>
+          <path d="M3 10l11 11"></path>
+          <path d="M3 3v7h7"></path>
+        </svg>
+        放大查看热力图
       </button>
     </div>
 

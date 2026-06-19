@@ -18,6 +18,20 @@ function velocityToColor(speed: number): string {
   return `hsl(${hue}, ${sat}%, ${light}%)`
 }
 
+function getIntensityScale(intensity: string, maxDens: number): number {
+  switch (intensity) {
+    case 'low':
+      return maxDens * 0.3
+    case 'medium':
+      return maxDens * 0.6
+    case 'high':
+      return maxDens * 1.0
+    case 'auto':
+    default:
+      return maxDens
+  }
+}
+
 function draw() {
   const ctx = canvas.value?.getContext('2d')
   if (!ctx) return
@@ -62,11 +76,12 @@ function draw() {
     }
   }
   const maxDens = Math.max(...densityGrid, 1)
+  const intensityScale = getIntensityScale(store.heatmapIntensity, maxDens)
   for (let gy = 0; gy < gh; gy++) {
     for (let gx = 0; gx < gw; gx++) {
       const d = densityGrid[gy * gw + gx]
       if (d > 0) {
-        const alpha = Math.min(d / maxDens * 0.15, 0.15)
+        const alpha = Math.min(d / intensityScale * 0.15, 0.15)
         ctx.fillStyle = `rgba(59, 130, 246, ${alpha})`
         ctx.fillRect(gx * gridSize, gy * gridSize, gridSize, gridSize)
       }
